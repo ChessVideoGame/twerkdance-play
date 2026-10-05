@@ -33,8 +33,10 @@ jobs:
           test -f _headers && cp -a _headers _site/ || true
           test -f README.md && cp -a README.md _site/ || true
           cp -a Build _site/
+          # Songs/charts: required for playable WebGL (Unity StreamingAssets)
+          test -d StreamingAssets && cp -a StreamingAssets _site/
           ls -la _site
-          du -sh _site _site/Build/*
+          du -sh _site _site/Build/* _site/StreamingAssets 2>/dev/null || du -sh _site _site/Build/*
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

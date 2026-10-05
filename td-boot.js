@@ -69,12 +69,12 @@
   window.addEventListener("keydown", unlockAudioOnce, true);
 
   var buildUrl = "Build";
-  var loaderUrl = buildUrl + "/36437c1eab60ac3f8dceb184d6d73f91.loader.js";
+  var loaderUrl = buildUrl + "/a3f9840048920159206742b079511833.loader.js";
   var config = {
     arguments: [],
-    dataUrl: buildUrl + "/b3bf5083512e07f3b0431153b1997058.data",
-    frameworkUrl: buildUrl + "/4725f0a837f382f4ab42e2d5a439452c.framework.js",
-    codeUrl: buildUrl + "/5f8edab9d26abed6d123554cb7c70f79.wasm",
+    dataUrl: buildUrl + "/815b3c1c9ae9ec923eac31bb2fa0d6c2.data",
+    frameworkUrl: buildUrl + "/b138b66a4e66ab9f0115e3767afd970c.framework.js",
+    codeUrl: buildUrl + "/2d75bad1c9ca88d70585601e2b37af11.wasm",
     streamingAssetsUrl: "StreamingAssets",
     companyName: "Ai-Blockchain",
     productName: "Twerk Dance",

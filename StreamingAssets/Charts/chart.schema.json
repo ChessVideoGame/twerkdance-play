@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://twerkdance.fun/schemas/chart-1.0.json",
+  "title": "Twerk Dance chart",
+  "description": "Engine-agnostic, time-based rhythm chart. All times are integer milliseconds from the first sample of the referenced audio file (after decoder priming removal).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["formatVersion", "songId", "title", "audio", "timing", "sections", "difficulties"],
+  "properties": {
+    "formatVersion": { "type": "string", "const": "1.0" },
+    "songId": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "description": "Stable catalog id, e.g. you-have-it" },
+    "title": { "type": "string", "minLength": 1 },
+    "artist": { "type": "string" },
+    "audio": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "durationMs", "sampleRate"],
+      "properties": {
+        "file": { "type": "string", "description": "Audio file the chart is timed against (game edit), e.g. you-have-it_game.m4a" },
+        "altFiles": { "type": "array", "items": { "type": "string" } },
+        "durationMs": { "type": "integer", "minimum": 1 },
+        "sampleRate": { "type": "integer", "minimum": 8000 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "Hash of the master game WAV the chart was authored on" },
+        "loudnessLufs": { "type": "number" },
+        "truePeakDbtp": { "type": "number" },
+        "previewStartMs": { "type": "integer", "minimum": 0 },
+        "sourceEdit": {
+          "type": "object",
+          "description": "Where the game edit came from in the original master (informational).",
+          "additionalProperties": false,
+          "properties": {
+            "masterFile": { "type": "string" },
+            "masterStartMs": { "type": "integer", "minimum": 0 },
+            "masterEndMs": { "type": "integer", "minimum": 0 },
+            "fadeInMs": { "type": "integer", "minimum": 0 },
+            "fadeOutMs": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bpm", "offsetMs", "beatsPerBar"],
+      "properties": {
+        "bpm": { "type": "number", "exclusiveMinimum": 0, "maximum": 400, "description": "Primary tempo." },
+        "offsetMs": { "type": "number", "description": "Time of beat 0 (first downbeat of bar 0). May be negative." },
+        "beatsPerBar": { "type": "integer", "minimum": 1, "maximum": 16 },
+        "tempoChanges": {
+          "type": "array",
+          "description": "Optional tempo map for songs that change tempo; first entry should match bpm/offsetMs.",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["timeMs", "bpm"],
+            "properties": { "timeMs": { "type": "number" }, "bpm": { "type": "number", "exclusiveMinimum": 0 }, "beatsPerBar": { "type": "integer", "minimum": 1 } }
+          }
+        },
+        "beats": {
+          "type": "array",
+          "description": "Optional explicit beat grid in ms (overrides computation from bpm/offset when present).",
+          "items": { "type": "integer", "minimum": 0 }
+        },
+        "downbeats": { "type": "array", "items": { "type": "integer", "minimum": 0 } }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["startMs", "endMs", "label"],
+        "properties": {
+          "startMs": { "type": "integer", "minimum": 0 },
+          "endMs": { "type": "integer", "minimum": 0 },
+          "label": { "type": "string", "enum": ["intro", "verse", "prechorus", "chorus", "bridge", "breakdown", "drop", "outro", "other"] },
+          "energy": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "signatureMove": {
+      "type": "object",
+      "description": "Optional: the section where the dancer performs the song's signature (challenge) move.",
+      "additionalProperties": false, "required": ["startMs", "endMs", "moveId"],
+      "properties": {
+        "startMs": { "type": "integer", "minimum": 0 },
+        "endMs": { "type": "integer", "minimum": 0 },
+        "moveId": { "type": "string" },
+        "label": { "type": "string" }
+      }
+    },
+    "difficulties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["easy", "normal", "hard"],
+      "properties": {
+        "easy": { "$ref": "#/$defs/difficulty" },
+        "normal": { "$ref": "#/$defs/difficulty" },
+        "hard": { "$ref": "#/$defs/difficulty" }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "description": "Free-form provenance (generator version, authoring status, reviewer).",
+      "properties": {
+        "generator": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "status": { "type": "string", "enum": ["auto", "auto-polished", "human-reviewed", "final"] },
+        "notes": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "difficulty": {
+      "type": "object", "additionalProperties": false, "required": ["level", "notes"],
+      "properties": {
+        "level": { "type": "integer", "minimum": 1, "maximum": 10, "description": "Display rating" },
+        "minGapMs": { "type": "integer", "minimum": 0 },
+        "notes": { "type": "array", "items": { "$ref": "#/$defs/note" } }
+      }
+    },
+    "note": {
+      "type": "object", "additionalProperties": false, "required": ["t", "dir", "type"],
+      "properties": {
+        "t": { "type": "integer", "minimum": 0, "description": "Hit time in ms" },
+        "dir": { "type": "string", "enum": ["up", "down", "left", "right"] },
+        "type": { "type": "string", "enum": ["tap", "hold"] },
+        "dur": { "type": "integer", "minimum": 1, "description": "Hold length in ms (required when type=hold)" },
+        "beat": { "type": "number", "description": "Optional musical position in beats from beat 0 (informational)" },
+        "sig": { "type": "boolean", "description": "Note belongs to the signature-move section" }
+      },
+      "if": { "properties": { "type": { "const": "hold" } } },
+      "then": { "required": ["dur"] },
+      "else": { "not": { "required": ["dur"] } }
+    }
+  }
+}
