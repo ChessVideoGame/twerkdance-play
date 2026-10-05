@@ -11,7 +11,7 @@ permissions:
   id-token: write
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   deploy:
     environment:
@@ -20,10 +20,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Upload Pages artifact (repo root, exclude .git / workflows)
-        uses: actions/upload-pages-artifact@v3
+      - name: Stage player files for Pages
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          # Copy published player assets; keep .nojekyll; skip git/ci/docs-only noise.
+          cp -a .nojekyll index.html td-boot.js td-unsupported.html td.css robots.txt _headers README.md _site/ 2>/dev/null || true
+          # Required player bits
+          test -f index.html && cp -a index.html td-boot.js td-unsupported.html td.css _site/
+          test -f .nojekyll && cp -a .nojekyll _site/
+          test -f robots.txt && cp -a robots.txt _site/ || true
+          test -f _headers && cp -a _headers _site/ || true
+          test -f README.md && cp -a README.md _site/ || true
+          cp -a Build _site/
+          ls -la _site
+          du -sh _site _site/Build/*
+      - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - id: deployment
         name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
