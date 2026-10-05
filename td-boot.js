@@ -1,0 +1,107 @@
+(function () {
+  "use strict";
+
+  var unsupported = document.getElementById("td-unsupported");
+  var inapp = document.getElementById("td-inapp");
+  var canvas = document.getElementById("unity-canvas");
+  var progressBar = document.getElementById("td-progress-bar");
+
+  function showUnsupported() {
+    document.body.classList.add("td-unsupported");
+    if (unsupported) unsupported.hidden = false;
+  }
+
+  function isUnsupportedBrowser() {
+    var ua = navigator.userAgent || "";
+    if (typeof WebAssembly === "undefined") return true;
+    try {
+      var c = document.createElement("canvas");
+      var gl = c.getContext("webgl2");
+      if (!gl) return true;
+    } catch (e) {
+      return true;
+    }
+    // Safari / iOS WebKit older than 16
+    var m = ua.match(/Version\/(\d+)/);
+    if (m && parseInt(m[1], 10) < 16 && /Safari/i.test(ua) && !/Chrome|CriOS|Edg/i.test(ua)) {
+      return true;
+    }
+    var ios = ua.match(/OS (\d+)[_\s]/);
+    if (ios && parseInt(ios[1], 10) < 16 && /iPhone|iPad|iPod/i.test(ua)) {
+      return true;
+    }
+    return false;
+  }
+
+  function isInAppBrowser() {
+    var ua = navigator.userAgent || "";
+    return /FBAN|FBAV|Instagram|TikTok|BytedanceWebview|Line\//i.test(ua);
+  }
+
+  if (isUnsupportedBrowser()) {
+    showUnsupported();
+    return;
+  }
+
+  if (isInAppBrowser() && inapp) {
+    inapp.hidden = false;
+    var closeBtn = document.getElementById("td-inapp-close");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function () {
+        inapp.hidden = true;
+      });
+    }
+  }
+
+  // First tap unlocks audio; never treat as a game input here.
+  function unlockAudioOnce() {
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      var ctx = new AC();
+      if (ctx.state === "suspended") ctx.resume();
+      ctx.close();
+    } catch (e) { /* ignore */ }
+    window.removeEventListener("pointerdown", unlockAudioOnce, true);
+    window.removeEventListener("keydown", unlockAudioOnce, true);
+  }
+  window.addEventListener("pointerdown", unlockAudioOnce, true);
+  window.addEventListener("keydown", unlockAudioOnce, true);
+
+  var buildUrl = "Build";
+  var loaderUrl = buildUrl + "/36437c1eab60ac3f8dceb184d6d73f91.loader.js";
+  var config = {
+    arguments: [],
+    dataUrl: buildUrl + "/b3bf5083512e07f3b0431153b1997058.data",
+    frameworkUrl: buildUrl + "/4725f0a837f382f4ab42e2d5a439452c.framework.js",
+    codeUrl: buildUrl + "/5f8edab9d26abed6d123554cb7c70f79.wasm",
+    streamingAssetsUrl: "StreamingAssets",
+    companyName: "Ai-Blockchain",
+    productName: "Twerk Dance",
+    productVersion: "0.1.0",
+  };
+
+  function loadScript(src, onload, onerror) {
+    var s = document.createElement("script");
+    s.src = src;
+    s.onload = onload;
+    s.onerror = onerror;
+    document.body.appendChild(s);
+  }
+
+  loadScript(loaderUrl, function () {
+    if (typeof createUnityInstance !== "function") {
+      showUnsupported();
+      return;
+    }
+    createUnityInstance(canvas, config, function (progress) {
+      if (progressBar) progressBar.style.width = Math.round(100 * progress) + "%";
+    }).then(function () {
+      document.body.classList.add("td-ready");
+    }).catch(function () {
+      showUnsupported();
+    });
+  }, function () {
+    showUnsupported();
+  });
+})();

@@ -1,22 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Twerk Dance</title>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; worker-src 'self' blob:; img-src 'self' data: blob:; media-src 'self' blob:; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'">
-<meta name="referrer" content="no-referrer">
-<meta name="robots" content="index,follow">
-<style>
-  html,body{margin:0;min-height:100%;background:#0b0b0f;color:#f2f2f2;font-family:system-ui,sans-serif;display:grid;place-items:center}
-  main{max-width:28rem;padding:2rem;text-align:center}
-  p{opacity:.85;line-height:1.5}
-</style>
-</head>
-<body>
-<main>
-  <h1>Twerk Dance</h1>
-  <p>Playable build coming soon.</p>
-</main>
-</body>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
+    <!-- GitHub Pages has no _headers; bake CSP here (same as public/csp-meta.snippet.html). -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; worker-src 'self' blob:; img-src 'self' data: blob:; media-src 'self' blob:; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'">
+    <meta name="referrer" content="no-referrer">
+    <title>Twerk Dance</title>
+    <link rel="stylesheet" href="td.css">
+  </head>
+  <body>
+    <div id="td-root">
+      <div id="td-inapp" hidden>
+        <p>For the best play, open this page in your browser.</p>
+        <button type="button" id="td-inapp-close">Dismiss</button>
+      </div>
+      <div id="td-unsupported" hidden>
+        <p>Your browser needs an update to play Twerk Dance. Please update to the latest version, or open this page in Chrome or Safari 16+.</p>
+      </div>
+      <canvas id="unity-canvas" width="960" height="600" tabindex="-1"></canvas>
+      <div id="td-loading">
+        <div id="td-loading-label">Loading…</div>
+        <div id="td-progress"><div id="td-progress-bar"></div></div>
+      </div>
+    </div>
+    <!-- No inline script (CSP + zero-data). All boot logic lives in td-boot.js. -->
+    <script src="td-boot.js"></script>
+  </body>
 </html>
