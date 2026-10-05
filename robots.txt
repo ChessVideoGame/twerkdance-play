@@ -1,0 +1,4 @@
+# play.twerkdance.fun (launch week, soft public): allow indexing; no sitemap push; no social posts without Sky.
+# CMO may tighten later. Do not Disallow:/ on the live play host.
+User-agent: *
+Allow: /
