@@ -32,6 +32,8 @@ jobs:
           test -f robots.txt && cp -a robots.txt _site/ || true
           test -f _headers && cp -a _headers _site/ || true
           test -f README.md && cp -a README.md _site/ || true
+          # Favicon (template ships favicon.png + favicon.ico; avoids cold-load 404)
+          for f in favicon.png favicon.ico; do test -f "$f" && cp -a "$f" _site/ || true; done
           cp -a Build _site/
           # Songs/charts: required for playable WebGL (Unity StreamingAssets)
           test -d StreamingAssets && cp -a StreamingAssets _site/

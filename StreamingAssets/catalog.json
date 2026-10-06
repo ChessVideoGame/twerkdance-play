@@ -1,0 +1,75 @@
+{
+ "catalogVersion": 1,
+ "songs": [
+  {
+   "id": "you-have-it",
+   "title": "You Have It",
+   "artist": "Sky Silver",
+   "chart": "Charts/you-have-it.json",
+   "audio": "Audio/you-have-it_game.m4a"
+  },
+  {
+   "id": "my-ai-loves-me",
+   "title": "My AI Loves Me",
+   "artist": "Sky Silver",
+   "chart": "Charts/my-ai-loves-me.json",
+   "audio": "Audio/my-ai-loves-me_game.m4a"
+  },
+  {
+   "id": "neon-eternity",
+   "title": "Neon Eternity",
+   "artist": "Sky Silver",
+   "chart": "Charts/neon-eternity.json",
+   "audio": "Audio/neon-eternity_game.m4a"
+  },
+  {
+   "id": "base-jumping",
+   "title": "Base Jumping",
+   "artist": "Sky Silver",
+   "chart": "Charts/base-jumping.json",
+   "audio": "Audio/base-jumping_game.m4a"
+  },
+  {
+   "id": "bethany-beauty",
+   "title": "Bethany Beauty",
+   "artist": "Sky Silver",
+   "chart": "Charts/bethany-beauty.json",
+   "audio": "Audio/bethany-beauty_game.m4a"
+  },
+  {
+   "id": "dont-you-tell-them-who",
+   "title": "Don't You Tell Them Who",
+   "artist": "Sky Silver",
+   "chart": "Charts/dont-you-tell-them-who.json",
+   "audio": "Audio/dont-you-tell-them-who_game.m4a"
+  },
+  {
+   "id": "good-news-bad-news",
+   "title": "Good News Bad News",
+   "artist": "Sky Silver",
+   "chart": "Charts/good-news-bad-news.json",
+   "audio": "Audio/good-news-bad-news_game.m4a"
+  },
+  {
+   "id": "hazy-maze",
+   "title": "Hazy Maze",
+   "artist": "Sky Silver",
+   "chart": "Charts/hazy-maze.json",
+   "audio": "Audio/hazy-maze_game.m4a"
+  },
+  {
+   "id": "nepo-baby",
+   "title": "Nepo Baby",
+   "artist": "Sky Silver",
+   "chart": "Charts/nepo-baby.json",
+   "audio": "Audio/nepo-baby_game.m4a"
+  },
+  {
+   "id": "rocks-off",
+   "title": "Rocks Off",
+   "artist": "Sky Silver",
+   "chart": "Charts/rocks-off.json",
+   "audio": "Audio/rocks-off_game.m4a"
+  }
+ ]
+}
