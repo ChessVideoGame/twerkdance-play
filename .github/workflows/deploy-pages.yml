@@ -34,6 +34,7 @@ jobs:
           test -f README.md && cp -a README.md _site/ || true
           # Favicon (template ships favicon.png + favicon.ico; avoids cold-load 404)
           for f in favicon.png favicon.ico; do test -f "$f" && cp -a "$f" _site/ || true; done
+          test -f CNAME && cp -a CNAME _site/ || true
           cp -a Build _site/
           # Songs/charts: required for playable WebGL (Unity StreamingAssets)
           test -d StreamingAssets && cp -a StreamingAssets _site/
